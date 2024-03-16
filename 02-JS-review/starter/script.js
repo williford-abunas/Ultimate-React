@@ -142,3 +142,60 @@ function getBooks() {
 function getBook(id) {
   return data.find((d) => d.id === id)
 }
+
+//Destructuring
+
+// const book = getBook(3)
+// console.log(book)
+
+// const { title, author, pages, publicationDate, genres, hasMovieAdaptation } =
+//   book
+
+// const [primaryGenre, secondaryGenre, ...otherGenres] = genres
+// console.log(primaryGenre, secondaryGenre, otherGenres)
+
+// const newGenres = [...genres, 'epic fantasy']
+// console.log(newGenres)
+
+// const updatedBook = { ...book, moviePublicationDate: '2001-12-19', pages: 1210 }
+// console.log(updatedBook)
+
+// const getTotalReviewCounts = function (book) {
+//   const goodreads = book.reviews?.goodreads?.reviewsCount ?? 0
+//   const librarything = book.reviews?.librarything?.reviewsCount ?? 0
+
+//   return goodreads + librarything
+// }
+// console.log(getTotalReviewCounts(book))
+
+//Array functional methods
+const books = getBooks()
+
+const titles = books.map((b) => b.title)
+
+const essentialData = books.map((b) => ({
+  title: b.title,
+  author: b.author,
+}))
+
+console.log(essentialData)
+
+// 1) Add to object array
+const newBook = {
+  id: 6,
+  title: 'Harry Potter and the Chamber of Secrets',
+  author: 'J. K. Rowling',
+}
+
+const booksWithAddition = [...books, newBook]
+console.log(booksWithAddition)
+
+// 2) Delete book from array
+const booksWithDeletion = booksWithAddition.filter((book) => book.id !== 3)
+console.log(booksWithDeletion)
+
+// 3) Update book in array
+const booksWithUpdate = booksWithDeletion.map((book) =>
+  book.id === 1 ? { ...book, author: 'WillA' } : book
+)
+console.log(booksWithUpdate)
