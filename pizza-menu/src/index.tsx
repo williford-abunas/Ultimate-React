@@ -1,33 +1,53 @@
 import React from 'react'
 import ReactDOM, { Container } from 'react-dom/client'
 import './index.css'
-import { PizzaModel, pizzaData } from '../public/data'
+import { PizzaModel, pizzaData } from './data.tsx'
+
+interface PizzaProps {
+  pizzaData: PizzaModel[]
+}
 
 function App() {
   return (
-    <>
+    <div className="container">
       <Header />
       <Menu />
       <Footer />
-    </>
+    </div>
   )
 }
 
 function Header() {
   return (
     <>
-      <h1 className="text-red">Fast React Pizza Co.</h1>
+      <header className="header">
+        <h1>Fast React Pizza Co.</h1>
+      </header>
     </>
   )
 }
 function Menu() {
   return (
     <>
-      <h2>Our Menu</h2>
-      <Pizza />
+      <main className="menu">
+        <h2>Our Menu</h2>
+        <Pizza pizzaData={pizzaData} />
+      </main>
     </>
   )
 }
+
+function Pizza({ pizzaData }: PizzaProps) {
+  return pizzaData.map((pizza) => (
+    <div className="pizza">
+      <img src={pizza.photoName} alt={pizza.name} />
+      <h3>{pizza.name}</h3>
+      <p>{pizza.ingredients}</p>
+      <span>{pizza.price}</span>
+    </div>
+  ))
+}
+
 function Footer() {
   const hour = new Date().getHours()
   const openHour = 12
@@ -37,16 +57,10 @@ function Footer() {
 
   return (
     <>
-      <footer>{new Date().toLocaleTimeString()} - We're currently open!</footer>
+      <footer className="footer">
+        {new Date().toLocaleTimeString()} - We're currently open!
+      </footer>
     </>
-  )
-}
-
-function Pizza() {
-  return (
-    <div>
-      <h2>Pizza</h2>
-    </div>
   )
 }
 
