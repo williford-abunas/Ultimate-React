@@ -38,14 +38,18 @@ function Menu() {
 }
 
 function Pizza({ pizzaData }: PizzaProps) {
-  return pizzaData.map((pizza) => (
-    <div className="pizza">
-      <img src={pizza.photoName} alt={pizza.name} />
-      <h3>{pizza.name}</h3>
-      <p>{pizza.ingredients}</p>
-      <span>{pizza.price}</span>
-    </div>
-  ))
+  return (
+    <ul className="pizzas">
+      {pizzaData.map((pizza, index) => (
+        <li className="pizza" key={index}>
+          <img src={pizza.photoName} alt={pizza.name} />
+          <h3>{pizza.name}</h3>
+          <p>{pizza.ingredients}</p>
+          <span>{pizza.price}</span>
+        </li>
+      ))}
+    </ul>
+  )
 }
 
 function Footer() {
