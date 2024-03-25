@@ -1,13 +1,3 @@
-import React from 'react'
-
-function Counter() {
-  return (
-    <div className="counterContainer">
-      <button className="minus">-</button>
-      <h3>Count: (count)</h3>
-      <button className="plus">+</button>
-    </div>
-  )
-}
+import React, { useState } from 'react'
 
 export default Counter
