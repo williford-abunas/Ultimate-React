@@ -40,7 +40,8 @@ function Counter() {
         <button className="plus" onClick={handleAddStep}>
           +
         </button>
-
+      </div>
+      <div className="counterContainer">
         <button className="minus" onClick={handleMinusCount}>
           -
         </button>
