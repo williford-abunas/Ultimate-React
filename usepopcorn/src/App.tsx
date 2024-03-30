@@ -1,17 +1,22 @@
 import { useState } from 'react'
 import { tempMovieData, tempWatchedData } from './data.ts'
+import { movieModel, watchedMovieModel } from './models.ts'
 import React from 'react'
 
-const average = (arr) =>
-  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0)
+const average = (arr: number[]) =>
+  arr.reduce(
+    (acc: number, cur: number, i: number, arr: number[]) =>
+      acc + cur / arr.length,
+    0
+  )
 
-function NavBar() {
+function NavBar({ movies }) {
   return (
     <>
       <nav className="nav-bar">
         <Logo />
         <Search />
-        <NumResults />
+        <NumResults movies={movies} />
       </nav>
     </>
   )
@@ -40,15 +45,15 @@ function Logo() {
   )
 }
 
-function NumResults() {
+function NumResults({ movies }) {
   return (
     <p className="num-results">
-      Found <strong>X</strong> results
+      Found <strong>{movies.length}</strong> results
     </p>
   )
 }
 
-function ListBox() {
+function ListBox({ movies }) {
   const [isOpen1, setIsOpen1] = useState(true)
 
   return (
@@ -59,17 +64,15 @@ function ListBox() {
       >
         {isOpen1 ? '–' : '+'}
       </button>
-      {isOpen1 && <MovieList />}
+      {isOpen1 && <MovieList movies={movies} />}
     </div>
   )
 }
 
-function MovieList() {
-  const [movies, setMovies] = useState(tempMovieData)
-
+function MovieList({ movies }) {
   return (
     <ul className="list">
-      {movies?.map((movie) => (
+      {movies?.map((movie: movieModel) => (
         <MovieItem movie={movie} />
       ))}
       <li>X</li>
@@ -117,7 +120,7 @@ function WatchedMovies() {
 function WatchedSummaryList({ watched }) {
   return (
     <ul className="list">
-      {watched.map((movie) => (
+      {watched.map((movie: watchedMovieModel) => (
         <WatchedMovie movie={movie} key={movie.imdbID} />
       ))}
     </ul>
@@ -148,9 +151,15 @@ function WatchedMovie({ movie }) {
 }
 
 function WatchedSummary({ watched }) {
-  const avgImdbRating = average(watched.map((movie) => movie.imdbRating))
-  const avgUserRating = average(watched.map((movie) => movie.userRating))
-  const avgRuntime = average(watched.map((movie) => movie.runtime))
+  const avgImdbRating = average(
+    watched.map((movie: { imdbRating: number }) => movie.imdbRating)
+  )
+  const avgUserRating = average(
+    watched.map((movie: { userRating: number }) => movie.userRating)
+  )
+  const avgRuntime = average(
+    watched.map((movie: { runtime: number }) => movie.runtime)
+  )
   return (
     <div className="summary">
       <h2>Movies you watched</h2>
@@ -176,20 +185,22 @@ function WatchedSummary({ watched }) {
   )
 }
 
-function Main() {
+function Main({ movies }) {
   return (
     <main className="main">
-      <ListBox />
+      <ListBox movies={movies} />
       <WatchedMovies />
     </main>
   )
 }
 
 export default function App() {
+  const [movies, setMovies] = useState(tempMovieData)
+
   return (
     <>
-      <NavBar />
-      <Main />
+      <NavBar movies={movies} />
+      <Main movies={movies} />
     </>
   )
 }
