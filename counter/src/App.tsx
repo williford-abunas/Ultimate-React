@@ -11,41 +11,48 @@ function App() {
 
 function Counter() {
   const [counter, setCounter] = useState(0)
-  const [step, setStep] = useState(1)
+  const [range, setRange] = useState(0)
 
   const date = new Date()
   date.setDate(date.getDate() + counter)
 
   const handleAddCount = () => {
-    setCounter((prevCount: number) => prevCount + step)
+    setCounter((prevCount: number) => prevCount + Number(range))
   }
   const handleMinusCount = () => {
-    setCounter((prevCount: number) => prevCount - step)
+    setCounter((prevCount: number) => prevCount - Number(range))
   }
 
-  const handleAddStep = () => {
-    setStep((prevCount: number) => prevCount + 1)
+  const handleRange = (stepRange: any) => {
+    setRange(stepRange)
   }
-  const handleMinusStep = () => {
-    setStep((prevCount: number) => prevCount - 1)
+
+  const handleCountChange = (count: number) => {
+    setCounter(Number(count))
   }
 
   return (
     <>
-      <div className="counterContainer">
-        <button className="minus" onClick={handleMinusStep}>
-          -
-        </button>
-        <h3>Step: {step}</h3>
-        <button className="plus" onClick={handleAddStep}>
-          +
-        </button>
+      <div>
+        <input
+          type="range"
+          min="0"
+          max="10"
+          value={range}
+          onChange={(e) => handleRange(e.target.value)}
+        />
+        <p>{range}</p>
       </div>
+
       <div className="counterContainer">
         <button className="minus" onClick={handleMinusCount}>
           -
         </button>
-        <h3>Count: {counter}</h3>
+        <input
+          type="text"
+          onChange={(e) => handleCountChange(Number(e.target.value))}
+          value={counter}
+        />
         <button className="plus" onClick={handleAddCount}>
           +
         </button>
@@ -60,6 +67,16 @@ function Counter() {
         </span>
         <span>{date.toDateString()}.</span>
       </p>
+      {counter !== 0 || range !== 0 ? (
+        <button
+          onClick={() => {
+            setCounter(0)
+            setRange(0)
+          }}
+        >
+          reset
+        </button>
+      ) : null}
     </>
   )
 }
