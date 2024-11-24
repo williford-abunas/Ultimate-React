@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { tempMovieData, tempWatchedData } from './data.ts'
+import { tempMovieData, tempWatchedData } from './data.js'
 import { movieModel, watchedMovieModel } from './models.ts'
 import React from 'react'
 
