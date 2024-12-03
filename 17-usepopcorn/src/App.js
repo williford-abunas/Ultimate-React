@@ -23,6 +23,11 @@ export default function App() {
   const handleCloseMovie = () => {
     setSelectedId(null)
   }
+
+  const handleAddWatched = (movie) => {
+    setWatched(watched => [...watched, movie])
+  }
+
   useEffect(() => {
 
     const fetchMovies = async () => {
@@ -63,7 +68,7 @@ export default function App() {
           {error && <ErrorMessage message={error} />}
         </Box>
         <Box>
-          { selectedId ? <MovieDetails selectedId={selectedId} onCloseMovie={handleCloseMovie}/> : 
+          { selectedId ? <MovieDetails selectedId={selectedId} onCloseMovie={handleCloseMovie} onAddWatched={handleAddWatched}/> : 
           <>
           <WatchedSummary watched={watched} />
           <WatchedMoviesList watched={watched} />
@@ -160,11 +165,19 @@ function Movie({ movie, onSelectMovie }) {
   </li>
 }
 
-function MovieDetails({selectedId, onCloseMovie}) {
+function MovieDetails({selectedId, onCloseMovie, onAddWatched}) {
   const [movieDetail, setMovieDetail] = useState({})
   const [isLoading, setIsLoading] = useState(false)
+  const [userRating, setUserRating] = useState('')
   const {Title: title, Year: year, Poster: poster, Runtime: runtime, imdbRating, Plot: plot, Released: released, Actors: actors, Director: director, Genre: genre} = movieDetail
 
+  const handleAddWatched = (movie) => {
+    const newWatchedMovie = {
+      imdbID: selectedId, title, year, poster, imdbRating: Number(imdbRating), runtime: Number(runtime.split(' ')[0]), userRating
+    }
+    onAddWatched(newWatchedMovie)
+    onCloseMovie()
+  }
 
 useEffect(() => {
   const getMovieDetails = async () => {
@@ -191,7 +204,8 @@ useEffect(() => {
     </header>
     <section>
       <div className="rating">
-      <StarRating maxRating={10} size={24}/>
+      <StarRating maxRating={10} size={24} onSetRating={setUserRating}/>
+      {userRating > 0 && <button className="btn-add" onClick={handleAddWatched}>+ Add to list</button>}
       </div>
       <p><em>{plot}</em></p>
       <p> Starring {actors}</p>
@@ -215,11 +229,11 @@ function WatchedSummary({ watched }) {
       </p>
       <p>
         <span>⭐️</span>
-        <span>{avgImdbRating}</span>
+        <span>{avgImdbRating.toFixed(1)}</span>
       </p>
       <p>
         <span>🌟</span>
-        <span>{avgUserRating}</span>
+        <span>{avgUserRating.toFixed(1)}</span>
       </p>
       <p>
         <span>⏳</span>
@@ -239,8 +253,8 @@ function WatchedMoviesList({ watched }) {
 
 function WatchedMovie({ movie }) {
   return <li >
-    <img src={movie.Poster} alt={`${movie.Title} poster`} />
-    <h3>{movie.Title}</h3>
+    <img src={movie.poster} alt={`${movie.title} poster`} />
+    <h3>{movie.title}</h3>
     <div>
       <p>
         <span>⭐️</span>
