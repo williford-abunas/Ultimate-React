@@ -31,6 +31,9 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatched, w
     getMovieDetails()
   }, [selectedId])
 
+  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId)
+  const watchedUserRating = watched.find((movie) => movie.imdbID === selectedId)?.userRating
+
   return <div className="details">
     {isLoading ? <Loader /> : <><header>
       <div className="btn-back" onClick={onCloseMovie}>&larr;</div>
@@ -44,9 +47,12 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatched, w
     </header>
       <section>
         <div className="rating">
-          
-          <StarRating maxRating={10} size={24} onSetRating={setUserRating} />
-          {userRating > 0 && <button className="btn-add" onClick={handleAddWatched}>+ Add to list</button>}
+          {!isWatched ? <>
+            <StarRating maxRating={10} size={24} onSetRating={setUserRating} />
+            {userRating > 0 && <button className="btn-add" onClick={handleAddWatched}>+ Add to list</button>}
+          </>
+          : <p>You have rated this movie {watchedUserRating} <span>⭐</span></p>}
+            
         </div>
         <p><em>{plot}</em></p>
         <p> Starring {actors}</p>
