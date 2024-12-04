@@ -9,6 +9,7 @@ import Loader from './components/Loader.jsx'
 import WatchedSummary from './components/WatchedSummary.jsx'
 import MovieList from './components/MovieList.jsx'
 import WatchedMoviesList from './components/WatchedMoviesList.jsx' 
+import ErrorMessage from "./components/ErrorMessage.jsx"
 
 const apiKey = process.env.REACT_APP_API_KEY
 
@@ -18,7 +19,7 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const [query, setQuery] = useState("smile");
+  const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null)
 
   const handleSelectMovie = (id) => {
@@ -38,23 +39,27 @@ export default function App() {
   }
 
   useEffect(() => {
-
+    const controller = new AbortController()
     const fetchMovies = async () => {
       try {
         setIsLoading(true)
         setError("")
-        const res = await fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=${query}`)
+        const res = await fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=${query}`, {signal: controller.signal})
         if (!res.ok) throw new Error("Something went wrong!");
         const data = await res.json()
         if (data.Response === 'False') throw new Error('Movie not found!')
         setMovies(data.Search)
+        setError("")
       } catch (err) {
-        console.error(err.message)
-        setError(err.message)
+        if (err.name !== "AbortError") {
+          setError(err.message)
+          console.error(err.message)
+        }
       } finally {
         setIsLoading(false)
       }
     }
+
     if (query.length < 3) {
       setMovies([])
       setError("")
@@ -62,6 +67,8 @@ export default function App() {
     }
 
     fetchMovies()
+
+    return () => {controller.abort()}
   }, [query])
 
   return (
@@ -86,11 +93,6 @@ export default function App() {
       </Main>
     </>
   );
-}
-
-
-function ErrorMessage({ message }) {
-  return <p className='error'><span>❗</span>{message}</p>
 }
 
 function Main({ children }) {

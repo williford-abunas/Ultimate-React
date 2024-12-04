@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
 import StarRating from './StarRating.jsx'
 import Loader from './Loader.jsx'
+import ErrorMessage from './ErrorMessage.jsx'
 
 const apiKey = process.env.REACT_APP_API_KEY
 
@@ -8,6 +9,7 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatched, w
   const [movieDetail, setMovieDetail] = useState({})
   const [isLoading, setIsLoading] = useState(false)
   const [userRating, setUserRating] = useState('')
+  const [error, setError] = useState(null)
   const { Title: title, Year: year, Poster: poster, Runtime: runtime, imdbRating, Plot: plot, Released: released, Actors: actors, Director: director, Genre: genre } = movieDetail
 
   const handleAddWatched = (movie) => {
@@ -19,23 +21,44 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatched, w
   }
 
   useEffect(() => {
+    const controller = new AbortController()
     const getMovieDetails = async () => {
-      setIsLoading(true)
-      const res = await fetch(`http://www.omdbapi.com/?apikey=${apiKey}&i=${selectedId}`)
-      const data = await res.json()
-      setMovieDetail(data)
-      setIsLoading(false)
-    }
-
-
+    try {
+        setIsLoading(true)
+        const res = await fetch(`http://www.omdbapi.com/?apikey=${apiKey}&i=${selectedId}`, {signal: controller.signal})
+        if (!res.ok) {throw new Error(`Server error: ${res.status}`)}
+        const data = await res.json()
+        if (data.Response === 'False') {throw new Error('Movie not found')}
+        setMovieDetail(data)
+      }
+      catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error(err.message)
+          setError(err.message)
+        }
+      } finally {
+        setIsLoading(false)
+      }
+    } 
+      
     getMovieDetails()
+    return () => {controller.abort()}
   }, [selectedId])
+
+  useEffect(() => {
+    if (!title) return
+    document.title = `Movie | ${title}`;
+
+    return () => document.title = "usePopcorn"
+  }, [title])
 
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId)
   const watchedUserRating = watched.find((movie) => movie.imdbID === selectedId)?.userRating
 
   return <div className="details">
-    {isLoading ? <Loader /> : <><header>
+    {isLoading && <Loader />}
+    {!isLoading && error && <ErrorMessage nessage={error} />}
+    {!isLoading && !error && <><header>
       <div className="btn-back" onClick={onCloseMovie}>&larr;</div>
       <img src={poster} alt={`Poster of ${movieDetail}`} />
       <div className="details-overview">
