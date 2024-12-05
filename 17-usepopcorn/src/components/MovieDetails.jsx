@@ -21,6 +21,19 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatched, w
   }
 
   useEffect(() => {
+    const escapeKeyFunc = (e) => {
+      if(e.code === 'Escape') {
+        onCloseMovie()
+        console.log("Closing")
+      }
+    }
+
+    document.addEventListener('keydown', escapeKeyFunc)
+
+    return () => document.removeEventListener('keydown', escapeKeyFunc)
+  }, [onCloseMovie])
+
+  useEffect(() => {
     const controller = new AbortController()
     const getMovieDetails = async () => {
     try {
