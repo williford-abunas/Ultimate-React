@@ -24,7 +24,6 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatched, w
     const escapeKeyFunc = (e) => {
       if(e.code === 'Escape') {
         onCloseMovie()
-        console.log("Closing")
       }
     }
 
