@@ -2,14 +2,14 @@ import { useState, useEffect } from "react"
 
 const apiKey = process.env.REACT_APP_API_KEY
 
-export const useMovies = (query, callback) => {
+export const useMovies = (query) => {
 
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    callback?.()
+    // callback?.()
     const controller = new AbortController()
     const fetchMovies = async () => {
       try {
