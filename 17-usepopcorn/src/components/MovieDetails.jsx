@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react'
+import {useKey} from '../hooks/useKey.js'
 import StarRating from './StarRating.jsx'
 import Loader from './Loader.jsx'
 import ErrorMessage from './ErrorMessage.jsx'
@@ -20,17 +21,8 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatched, w
     onCloseMovie()
   }
 
-  useEffect(() => {
-    const escapeKeyFunc = (e) => {
-      if(e.code === 'Escape') {
-        onCloseMovie()
-      }
-    }
+  useKey('Escape', onCloseMovie)
 
-    document.addEventListener('keydown', escapeKeyFunc)
-
-    return () => document.removeEventListener('keydown', escapeKeyFunc)
-  }, [onCloseMovie])
 
   useEffect(() => {
     const controller = new AbortController()
