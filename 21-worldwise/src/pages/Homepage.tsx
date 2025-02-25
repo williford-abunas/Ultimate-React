@@ -1,8 +1,12 @@
 import React from 'react'
+import PageNav from "../components/PageNav.tsx"
 
 function Homepage() {
   return (
-    <div>Worldwise</div>
+    <div>
+      <PageNav />
+      <h1>Worldwise</h1>
+      </div>
   )
 }
 
