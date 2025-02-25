@@ -1,12 +1,8 @@
 import React from 'react'
-import AppNav from '../components/AppNav.tsx'
 
 function AppLayout() {
   return (
-    <div>
-      <AppNav />
-      <p>App</p>
-    </div>
+    <div>AppLayout</div>
   )
 }
 
