@@ -16,19 +16,19 @@ import { useEffect, useState } from 'react'
 import styles from './Map.module.css'
 import { useCities } from '../contexts/CitiesContext'
 import { useGeolocation } from '../hooks/useGeolocation'
+import { useUrlPosition } from '../hooks/useUrlPosition'
 import Button from './Button'
 
 function Map() {
   const { cities } = useCities()
   const [mapPosition, setMapPosition] = useState<LatLngTuple>([40, 0])
-  const [searchParams, setSearchParams] = useSearchParams()
   const {
     isLoading: isLoadingPosition,
     position: geolocationPosition,
     getPosition,
   } = useGeolocation()
-  const mapLat = Number(searchParams.get('lat')) || 40
-  const mapLng = Number(searchParams.get('lng')) || 0
+
+  const [mapLat, mapLng] = useUrlPosition()
 
   useEffect(() => {
     if (mapLat && mapLng) setMapPosition([mapLat, mapLng])
