@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { useCities } from '../contexts/CitiesContext.tsx'
 import Spinner from './Spinner.tsx'
 import BackButton from './BackButton.tsx'
-// import ButtonBack from './ButtonBack.tsx'
 
 const formatDate = (date: string | number | Date) =>
   new Intl.DateTimeFormat('en', {
