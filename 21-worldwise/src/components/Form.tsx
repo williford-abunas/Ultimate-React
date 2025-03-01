@@ -31,11 +31,16 @@ function Form() {
   const [geocodingError, setGeocodingError] = useState("")
 
   useEffect(() => {
+    if (mapLat === null || mapLng === null) return
+    
+    const controller = new AbortController()
+    const signal = controller.signal
+
       async function fetchCityData() {
         try {
           setIsLoadingGeocoding(true)
           setGeocodingError("")
-          const res = await fetch(`${BASE_URL}?latitude=${mapLat}&longitude=${mapLng}`)
+          const res = await fetch(`${BASE_URL}?latitude=${mapLat}&longitude=${mapLng}`, {signal})
           const data = await res.json()
 
           if(!data.countryCode) throw new Error("Not a city. Click Somewhere else...")
@@ -49,6 +54,7 @@ function Form() {
         }
       }
       fetchCityData()
+      return () => controller.abort()
   }, [mapLat, mapLng])
 
   if(isLoadingGeocoding) return <Spinner />
@@ -70,8 +76,9 @@ function Form() {
         <label htmlFor="date">When did you go to {cityName}?</label>
         <input
           id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
+          type="date"
+          onChange={(e) => setDate(new Date(e.target.value))}
+          value={date.toISOString().split("T")[0]} 
         />
       </div>
 
