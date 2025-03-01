@@ -13,6 +13,8 @@ const BASE_URL = 'http://localhost:8000'
 interface CitiesContextType {
   cities: Array<City>
   isLoading: boolean
+  getCity: (id: number) => void
+  currentCity: City | null
 }
 
 interface CitiesProviderProps {
@@ -25,7 +27,6 @@ function CitiesProvider({ children }: CitiesProviderProps): JSX.Element {
   const [cities, setCities] = useState<Array<City>>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [currentCity, setCurrentCity] = useState<City | null>(null)
-
 
   useEffect(() => {
     async function fetchCities() {
@@ -43,7 +44,7 @@ function CitiesProvider({ children }: CitiesProviderProps): JSX.Element {
     fetchCities()
   }, [])
 
-  async function getCity(id) {
+  async function getCity(id: string | number) {
     try {
       setIsLoading(true)
       const res = await fetch(`${BASE_URL}/cities/${id}`)
