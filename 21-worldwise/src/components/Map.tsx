@@ -57,7 +57,7 @@ function Map() {
         {cities.map((city) => (
           <Marker
             position={[city.position.lat, city.position.lng]}
-            key={city.id}
+            key={String(city.id) || `${city.cityName}-${city.position.lat}-${city.position.lng}`}
           >
             <Popup>
               <span>{city.emoji}</span>
@@ -66,7 +66,7 @@ function Map() {
           </Marker>
         ))}
         <ChangeCenter position={mapPosition} />
-        <DetectClick />
+        <DetectClick setPosition={setMapPosition} />
       </MapContainer>
     </div>
   )
@@ -79,12 +79,16 @@ function ChangeCenter({ position }: { position: LatLngTuple }) {
   return null
 }
 
-function DetectClick() {
+function DetectClick({setPosition}) {
   const navigate: NavigateFunction = useNavigate()
 
   useMapEvents({
     click: (e: LeafletMouseEvent) =>
-      navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`),
+      {
+        navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`)
+        setPosition([e.latlng.lat, e.latlng.lng])
+      }
+    
   })
 
   return null
