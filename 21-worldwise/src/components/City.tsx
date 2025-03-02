@@ -5,13 +5,18 @@ import { useCities } from '../contexts/CitiesContext.tsx'
 import Spinner from './Spinner.tsx'
 import BackButton from './BackButton.tsx'
 
-const formatDate = (date: string | number | Date) =>
-  new Intl.DateTimeFormat('en', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    weekday: 'long',
-  }).format(new Date(date))
+const formatDate = (date: string | number | Date) => {
+  console.log("Date value:", date); // Add this to see what's being passed
+  const formattedDate = new Date(date);
+  return isNaN(formattedDate.getTime()) 
+    ? "Invalid date" 
+    : new Intl.DateTimeFormat('en', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        weekday: 'long',
+      }).format(formattedDate);
+};
 
 function City() {
   const { id } = useParams()
@@ -19,9 +24,9 @@ function City() {
   const { getCity, currentCity, isLoading } = useCities()
 
   useEffect(() => {
-    if (id) getCity(Number(id))
+    if (id) getCity(id)
   }, [id])
-
+  console.log(currentCity)
   if (isLoading || !currentCity) return <Spinner />
 
   const { cityName, emoji, date, notes } = currentCity
