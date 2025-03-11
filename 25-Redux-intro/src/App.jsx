@@ -1,7 +1,7 @@
-import CreateCustomer from "./CreateCustomer";
-import Customer from "./Customer";
-import AccountOperations from "./AccountOperations";
-import BalanceDisplay from "./BalanceDisplay";
+import CreateCustomer from './Features/Customers/CreateCustomer'
+import Customer from './Features/Customers/Customer'
+import AccountOperations from './Features/Accounts/AccountOperations'
+import BalanceDisplay from './Features/Accounts/BalanceDisplay'
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
       <AccountOperations />
       <BalanceDisplay />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
