@@ -8,6 +8,7 @@ import {
 
 import {getOrder} from "../../services/apiRestaurant"
 import OrderItem from './OrderItem'
+import UpdateOrder from "./UpdateOrder";
 import { useEffect } from "react";
 
 
@@ -62,6 +63,7 @@ function Order() {
         {priority && <p className="text-sm font-medium text-stone-600">Price priority: {formatCurrency(priorityPrice)}</p>}
         <p className="font-bold">To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}</p>
       </div>
+      {!priority && <UpdateOrder />}
     </div>
   );
 }
