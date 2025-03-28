@@ -1,4 +1,4 @@
-import supabase from "../supabase"
+import supabase, { supabaseUrl } from "../supabase"
 import { camelToSnake } from "../utils/helpers"
 
 export async function getCabins() {
@@ -16,6 +16,8 @@ export async function getCabins() {
 }
 
 export async function createCabin(newCabin) {
+  const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll('/', "")
+  const imagePath = `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`
   // Only convert keys that have more than one word (camelCase)
   const transformedCabin = Object.keys(newCabin).reduce((acc, key) => {
     if (/[A-Z]/.test(key)) {
@@ -28,15 +30,34 @@ export async function createCabin(newCabin) {
     return acc;
   }, {});
 
-  const { error } = await supabase
+  // Create cabin
+  const { data, error } = await supabase
     .from('cabins')
-    .insert([transformedCabin])
-
+    .insert([{ ...transformedCabin, image: imagePath }])
 
   if (error) {
     console.error(error)
     throw new Error("Cabin could not be created")
   }
+
+  // Upload image
+  const { error: storageError } = await supabase
+    .storage
+    .from('cabin-images')
+    .upload(imageName, newCabin.image)
+
+  // Delete cabin if there's uploading error
+  if (storageError) {
+    await supabase
+      .from('cabins')
+      .delete()
+      .eq('id', data.id)
+
+    console.error(error)
+    throw new Error("Cabin image could not be uploaded and cabin was not be created")
+  }
+
+  return data
 }
 
 export async function deleteCabin(id) {
