@@ -28,3 +28,6 @@ export const formatCurrency = (value) =>
   new Intl.NumberFormat('en', { style: 'currency', currency: 'USD' }).format(
     value
   );
+
+export const camelToSnake = (str) => str.replace(/[A-Z]/g, (match) => `_${match.toLowerCase()}`);
+
