@@ -2,7 +2,7 @@
 import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-hot-toast'
-import { createEditCabin } from '../../services/apiCabins'
+import { createEditCabinApi } from '../../services/apiCabins'
 import Input from '../../ui/Input'
 import Form from '../../ui/Form'
 import Button from '../../ui/Button'
@@ -30,7 +30,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   const regularPriceWatched = watch('regularPrice')
 
   const { mutate: createCabin, isLoading: isCreating } = useMutation({
-    mutationFn: createEditCabin,
+    mutationFn: createEditCabinApi,
     onSuccess: () => {
       toast.success('New cabin successfully created')
       queryClient.invalidateQueries({ queryKey: ['cabin'] })
@@ -40,7 +40,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   })
 
   const { mutate: editCabin, isLoading: isEditing } = useMutation({
-    mutationFn: ({ newCabinData, id }) => createEditCabin(newCabinData, id),
+    mutationFn: ({ newCabinData, id }) => createEditCabinApi(newCabinData, id),
     onSuccess: () => {
       toast.success('Cabin successfully edited')
       queryClient.invalidateQueries({ queryKey: ['cabin'] })

@@ -1,7 +1,7 @@
 import supabase, { supabaseUrl } from "../supabase"
 import { camelToSnake } from "../utils/helpers"
 
-export async function getCabins() {
+export async function getCabinsApi() {
 
   const { data, error } = await supabase
     .from('cabins')
@@ -15,7 +15,7 @@ export async function getCabins() {
   return data
 }
 
-export async function createEditCabin(newCabin, id) {
+export async function createEditCabinApi(newCabin, id) {
   const hasImagePath = newCabin?.image?.startsWith?.(supabaseUrl)
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll('/', "")
   const imagePath = hasImagePath ? newCabin.image : `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`
@@ -69,7 +69,7 @@ export async function createEditCabin(newCabin, id) {
   return data
 }
 
-export async function deleteCabin(id) {
+export async function deleteCabinApi(id) {
 
   const { error } = await supabase
     .from('cabins')
