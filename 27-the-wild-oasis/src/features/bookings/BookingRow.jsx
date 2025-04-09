@@ -36,8 +36,6 @@ const Amount = styled.div`
 `
 
 function BookingRow({ booking }) {
-  console.log(booking)
-
   const {
     cabin_name: cabinName,
     guests: { full_name: guestName, email },
