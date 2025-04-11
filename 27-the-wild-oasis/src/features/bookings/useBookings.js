@@ -23,11 +23,11 @@ export function useBookings() {
     : Number(searchParams.get('page'))
 
   // QUERY
-  const { isLoading, data: { data: bookings, count }, error } = useQuery({
+  const { isLoading, data: { data: bookings, count } = {}, error } = useQuery({
     queryKey: ['bookings', filter, sortBy, page],
     queryFn: () => getBookingsApi({ filter, sortBy, page }),
-    initialData: { data: [], count: 0 },
   })
+
 
   // PRE - FETCHING
   const pageCount = Math.ceil(count / PAGE_SIZE)

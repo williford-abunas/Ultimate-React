@@ -104,19 +104,18 @@ const Footer = styled.footer`
 
 // A purely presentational component
 function BookingDataBox({ booking }) {
-  console.log(booking)
   const {
     created_at,
-    startDate,
-    endDate,
-    numNights,
-    numGuests,
-    cabinPrice,
-    extrasPrice,
-    totalPrice,
-    hasBreakfast,
+    start_date: startDate,
+    end_date: endDate,
+    number_nights: numNights,
+    number_guests: numGuests,
+    cabin_price: cabinPrice,
+    extras_price: extrasPrice,
+    total_price: totalPrice,
+    has_breakfast: hasBreakfast,
     observations,
-    isPaid,
+    has_paid: isPaid,
     guests: { fullName: guestName, email, country, countryFlag, nationalID },
     cabins: { name: cabinName },
   } = booking
