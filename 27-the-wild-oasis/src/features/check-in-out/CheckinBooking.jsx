@@ -29,7 +29,7 @@ function CheckinBooking() {
   const { checkin, isCheckingIn } = useCheckin()
   const { settings, isLoading: isLoadingSettings } = useSettings()
   const moveBack = useMoveBack()
-  console.log(settings)
+
   useEffect(() => {
     if (booking) {
       setConfirmPaid(booking.has_paid ?? false)
