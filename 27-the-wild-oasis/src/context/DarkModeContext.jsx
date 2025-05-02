@@ -31,7 +31,7 @@ const DarkModeProvider = ({ children }) => {
   )
 }
 
-function useDarkMode() {
+export function useDarkMode() {
   const context = useContext(DarkModeContext)
 
   if (context === undefined)
@@ -40,4 +40,4 @@ function useDarkMode() {
   return context
 }
 
-export { DarkModeProvider, useDarkMode }
+export { DarkModeProvider }
