@@ -5,7 +5,6 @@ import FileInput from '../../ui/FileInput'
 import Form from '../../ui/Form'
 import FormRow from '../../ui/FormRow'
 import Input from '../../ui/Input'
-import UpdatePasswordForm from './UpdatePasswordForm'
 import { useUpdateUser } from './useUpdateUser'
 
 import { useUser } from './useUser'
@@ -21,7 +20,7 @@ function UpdateUserDataForm() {
 
   const { updateUser, isUpdating } = useUpdateUser()
 
-  const [fullName, setFullName] = useState(currentFullName)
+  const [fullName, setFullName] = useState(currentFullName ?? '')
   const [avatar, setAvatar] = useState(null)
 
   function handleSubmit(e) {
