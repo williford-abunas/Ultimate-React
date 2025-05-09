@@ -51,7 +51,7 @@ function BookingRow({ booking }) {
   const { checkout, isCheckingOut } = useCheckout()
   const {
     id: bookingId,
-    cabin_name: cabinName,
+    cabins,
     guests: { full_name: guestName, email },
     start_date: startDate,
     end_date: endDate,
@@ -70,7 +70,7 @@ function BookingRow({ booking }) {
 
   return (
     <Table.Row>
-      <Cabin>{cabinName}</Cabin>
+      <Cabin>{cabins.name}</Cabin>
 
       <Stacked>
         <span>{guestName}</span>
