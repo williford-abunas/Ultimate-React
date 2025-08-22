@@ -34,6 +34,7 @@ const DarkModeProvider = ({ children }) => {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useDarkMode() {
   const context = useContext(DarkModeContext)
 
